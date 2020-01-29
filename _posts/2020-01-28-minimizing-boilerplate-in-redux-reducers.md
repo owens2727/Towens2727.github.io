@@ -1,12 +1,12 @@
 ---
 layout: post
 title: Minimizing Boilerplate in Redux Reducers
-description: Redux reducers handle updates to application state. Most reducers use common patterns that can be abstracted and re-used across multiple reducers. In this post, we introduce reducer creators, a means of minimizing reducer boilerblate and avoiding redudant reducer logic.
+description: An exploration of reducer creators — functions that return reducers — which can abstract potentially redundant and repeated logic across similar reducers.
 ---
 
-[Redux reducers](https://redux.js.org/basics/reducers/) handle updates to application state. Most reducers use common patterns that can be abstracted and re-used across multiple reducers. In this post, we examine *reducer creators* (also called *higher-order reducers* or *reducer factories*), a means of minimizing reducer boilerblate and avoiding redudant reducer logic.
+[Redux reducers](https://redux.js.org/basics/reducers/) handle updates to application state. Most reducers use common patterns that can be abstracted and re-used across multiple reducers. In this post, we examine *reducer creators* (also called *higher-order reducers* or *reducer factories*), a means of minimizing reducer boilerplate and avoiding redundant reducer logic.
 
-This post explores the motivations behind the design patterns introduced by [Re-using Reducer Logic from the Redux](https://redux.js.org/recipes/structuring-reducers/reusing-reducer-logic). We'll also take things one step further by applying this design pattern to C.R.U.D. style resources fetched from and managed by a RESTful API.
+This post explores the motivations behind the design patterns introduced by [Reusing Reducer Logic from the Redux](https://redux.js.org/recipes/structuring-reducers/reusing-reducer-logic). We'll also take things one step further by applying this design pattern to C.R.U.D. style resources fetched from and managed by a RESTful API.
 
 ### What are reducers?
 
@@ -77,11 +77,11 @@ const yearTodoList = (state = [], action) => {
 
 Even though the action types are different across the three reducers, we clearly have some redundant patterns that could be abstracted. If, down the line, we made updates to how to-do lists are handled, we'd have to update all three reducers, which is a recipe for disaster.
 
-So how can we maintain these three independent lists while re-using common logic?
+So how can we maintain these three independent lists while reusing common logic?
 
 We introduce a function that *returns a reducer*. Since reducers are functions themselves, this is a function that returns a function.
 
-*(note: lots of powerful Javascript patterns rely on fuctions that return functions. Some involve functions that return functions that return functions. Yuck. In these cases, it's often helpful to give certain function types a name that indicates what they're responsible for. Here, we have a **reducer creator** that returns a **reducer**.)*
+*(note: lots of powerful Javascript patterns rely on functions that return functions. Some involve functions that return functions that return functions. Yuck. In these cases, it's often helpful to give certain function types a name that indicates what they're responsible for. Here, we have a **reducer creator** that returns a **reducer**.)*
 
 ```javascript
 const todoListReducerCreator = () => {
@@ -96,7 +96,7 @@ const todoListReducerCreator = () => {
 }
 ```
 
-To make better use of syntax shorthands, we can re-write the above as:
+To make better use of syntax shorthands, we can rewrite the above as:
 
 ```javascript
 const todoListReducerCreator = () => (state = [], action) => {
@@ -133,6 +133,63 @@ Now, when we call `todoListReducerCreator('today')`, we're configuring the reduc
 
 We've also elected to keep the names of our action types general: `ADD_TODO`, `REMOVE_TODO`, `CLEAR_TODOS`, and so on. To ensure that dispatched actions impact the right to-do list, we additionally provide an `action.dueBy` field on actions that will target the desired to-do list reducer. The guard clause at the beginning of our reducer creator enforces this constraint. Without it, `ADD_TODO` would add each new item to *every* to-do list.
 
-### Simple example of a reducer creator (list)
+### Applying reducer creators to CRUD Resources
 
-### More complicated resource reducer
+Many React + Redux applications interact with resources stored on a back-end server and accessed via an API. The client can *create, read, update, and destroy* these resources — actions commonly referenced by the acronym CRUD.
+
+We'll extend our to-do list example to consider an application where to-do items are stored on a persistent back-end.
+
+Following Redux best practices for [Redux async actions](https://redux.js.org/advanced/async-actions/) and resources we:
+ - store resources as a map (object) from the resource ID to the full resource object
+ - update the store when back-end requests complete (dispatching `_SUCCESS` actions)
+ - never mutate the state
+
+```javascript
+import { omit } from 'lodash';
+
+const resourceReducerCreator = resourceType => (
+  (state = {}, action) => {
+    if (action.resourceType !== resourceType) {
+      return state;
+    }
+
+    switch (action.type) {
+      case 'CREATE_RESOURCE_SUCCESS':
+      case 'READ_RESOURCE_SUCCESS':
+      case 'UPDATE_RESOURCE_SUCCESS':
+        return { ...state, [action.resource.id]: action.resource };
+      case 'DESTROY_RESOURCE_SUCCESS':
+        return omit(state, [action.resource.id]);
+      default:
+        return state;
+    }
+  }
+);
+
+const todos = resourceReducerCreator('todos');
+```
+
+*(note: Javascript switch cases fall through until they hit a `return` or `break` statement. We take advantage of this cascading syntax to reuse logic for reading, creating, and updating resources.)*
+
+Here `resourceReducerCreator` is a reducer creator that returns reducers that can manage resources. We call it with the name of the resource (`'todos'`) — this prevents cross-contamination of actions that concern a different type of resource.
+
+Create, read, and update operations all add the resource to the store, replacing an existing copy of that resource if necessary. The destroy operation removes the resource from the `id -> resource` map.
+
+If we wanted to allow for sub-tasks on each to-do item, we could easily introduce a new resource reducer with:
+
+```javascript
+const subtasks = resourceReducerCreator('todos');
+```
+
+Entire applications can spring up quickly with minimal additional reducer logic:
+
+```javascript
+const users = resourceReducerCreator('users');
+const notes = resourceReducerCreator('notes');
+const priorities = resourceReducerCreator('priorities');
+const bookmarks = resourceReducerCreator('bookmarks');
+```
+
+### Wrapping Up
+
+In this post, we looked at one pattern for minimizing repetitive logic in reducers. There are plenty of other strategies for [reducing boilerplate in Redux applications](https://redux.js.org/recipes/reducing-boilerplate). Boilerplate is often a nicer way of saying "redundant code," and redundant code can lead to nasty bugs and slower development. Be wary of code sections that have different variable names but redundant control flows (ifs, elses, loops, etc.). Even though these sections aren't precise *copies* of each other, the control flow itself can often be abstracted.

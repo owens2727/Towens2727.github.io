@@ -9,7 +9,7 @@ title: About Me
 
 ### The Best Fantasy Novel You Haven't Read
 
-**The Name of the Wind** by **Patrick Rothfuss** is a fantastic read. It's the top fantasy book on Good Reads that isn't a part of the Harry Potter, Lord of the Rings, or Game of Thrones series.
+**The Name of the Wind** by **Patrick Rothfuss** is a fantastic read. It's the top fantasy book on Good Reads that isn't a part of the Harry Potter, Lord of the Rings, or Game of Thrones series, and has flown under the radar for quite some time.
 
 [Good Reads Top Fantasy Novels](https://www.goodreads.com/shelf/show/fantasy)
 
@@ -19,17 +19,17 @@ I obsess over the daily ebb and flow of political theater, including election po
 
 [Maggie Haberman's Twitter](https://twitter.com/maggieNYT)
 
-### Being a Board Game Snob 101
+### You're Playing the Wrong Board Games (according to the internet)
 
-While I grew on Monopoly, Stratego, and Risk, the board games that capture my interest now look a lot different. I do a lot of my research on **Board Game Geek**, an online forum for discussing and ranking board games of the new, old, and ancient varities. For what it's worth, Chess stands at #439 in the overall rankings and Go comes in at #154. But I guess people seem to like them. If you're looking for a new game to play with friends, Board Game Geek is a fantastic resource.
+While I grew on Monopoly, Stratego, and Risk, the games that capture my interest now look a lot different. I do a lot of my research on **Board Game Geek**, an online forum for discussing and ranking board games of the new, old, and ancient varities. For what it's worth, Chess stands at #439 in the overall rankings and Go comes in at #154 — but people seem to like them. If you're looking for a new game to play with friends, Board Game Geek is a fantastic resource.
 
 [Top 100 Board Games Ever Made According to People on the Internet](https://boardgamegeek.com/browse/boardgame)
 
-### Being a Music Snob 101
+### Pitchfork Reviews Mumford & Sons
 
-Most of my opinions on music are stolen and rehashed from **Pitchfork** album reviews. Jokes aside, I get introduced to a lot of music here that I wouldn't otherwise have discovered.
+Most of my opinions on music are stolen and rehashed from **Pitchfork** album reviews. For all the snobbishness that comes along with music reviewers like Pitchfork, I do discover tons of music that I wouldn't have otherwise listened to. I also get some sick satisfaction out of seeing Pitchfork tear apart a household name band, like they did with *Mumford & Sons'* lackluster third studio album, *Wilder Mind*.
 
-[Pitchfork Rock Album Reviews](https://pitchfork.com/reviews/albums/?genre=rock)
+[Pitchfork Reviews Mumford & Sons' Wilder Mind](https://pitchfork.com/reviews/albums/20421-wilder-mind/)
 
 ### Where to Hike in Yosemite
 
